@@ -1,5 +1,7 @@
 import random
+import argparse
 import time
+import ast
 
 def empty_board(width, height):
     board = [[0 for _ in range(width)] for _ in range(height)]
@@ -53,7 +55,13 @@ def compute_next_board(current_board):
                     next_board[row_index][col_index] = 1
     return next_board
 
-current_board = random_board(100, 40)
+parser = argparse.ArgumentParser()
+parser.add_argument("board_file", type = argparse.FileType('r'))
+args = parser.parse_args()
+content = args.board_file.read()
+args.board_file.close()
+
+current_board = ast.literal_eval(content)
 
 while True:
     render_board(current_board)
