@@ -28,13 +28,29 @@ The program initializes a randomized board and continuously renders each generat
 
 ## Usage
 
-From the project folder, run:
+From the project folder, run the script and provide a file containing a board (a Python literal list of lists of 0/1):
 
 ```bash
-python app.py
+python app.py path/to/board_file.txt
 ```
 
-The simulation will start immediately and continue until interrupted.
+The program reads the file, parses the contents as a Python literal (using `ast.literal_eval`), and uses that as the initial board. The simulation renders each generation until interrupted.
+
+### Example board file
+
+Save a file (for example `glider.txt`) containing a Python list of lists:
+
+```text
+[[0, 1, 0],
+ [0, 0, 1],
+ [1, 1, 1]]
+```
+
+Run:
+
+```bash
+python app.py glider.txt
+```
 
 ## How it works
 
@@ -45,7 +61,13 @@ The implementation in `app.py` includes the following functions:
 - `render_board(board)`: prints the board to the terminal, using `#` for alive cells and a space for dead cells.
 - `compute_next_board(current_board)`: computes the next generation according to Conway's Game of Life rules.
 
-The main loop initializes a random board and then repeatedly renders the current state, waits a short time, and advances to the next generation.
+On startup the script parses a board file (via `argparse` and `ast.literal_eval`) into `current_board`. The main loop then repeatedly:
+
+- renders `current_board` to the terminal
+- sleeps briefly (`time.sleep(0.05)`) to control frame rate
+- computes the next generation with `compute_next_board`
+
+If you prefer to start from a randomized board, you can create a file using Python that calls `random_board(...)` and writes the result to disk, then pass that file to the script.
 
 ## Conway's Game of Life rules
 
