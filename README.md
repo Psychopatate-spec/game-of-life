@@ -40,10 +40,10 @@ The simulation will start immediately and continue until interrupted.
 
 The implementation in `app.py` includes the following functions:
 
-- `dead_state(width, height)`: returns a grid of dead cells (`0`) with the requested dimensions.
-- `random_state(width, height)`: returns a randomized grid containing dead (`0`) and alive (`1`) cells.
-- `render(board_state)`: prints the board to the terminal, using `#` for alive cells and a space for dead cells.
-- `next_board_state(initial_board_state)`: computes the next generation according to Conway's Game of Life rules.
+- `empty_board(width, height)`: returns a grid of dead cells (`0`) with the requested dimensions.
+- `random_board(width, height)`: returns a randomized grid containing dead (`0`) and alive (`1`) cells.
+- `render_board(board)`: prints the board to the terminal, using `#` for alive cells and a space for dead cells.
+- `compute_next_board(current_board)`: computes the next generation according to Conway's Game of Life rules.
 
 The main loop initializes a random board and then repeatedly renders the current state, waits a short time, and advances to the next generation.
 
