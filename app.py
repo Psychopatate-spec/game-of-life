@@ -101,7 +101,7 @@ def rel_to_arr(imported_rel):
                 return arr
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-B", "--board", type = argparse.FileType('r'), default = "./boards/empty.rle")
+parser.add_argument("-B", "--board", type = argparse.FileType('r'), default = "./empty.rle")
 parser.add_argument("-W", "--width", type = int, default = 0)
 parser.add_argument("-H", "--height", type = int, default = 0)
 args = parser.parse_args()
