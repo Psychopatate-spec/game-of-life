@@ -71,18 +71,48 @@ def resize_board(board, wanted_width, wanted_height):
                 wanted_board[j].append(0)
     return wanted_board
 
+def rel_to_arr(imported_rel):
+    arr = [[]]
+    row = 0
+    numbers = ""
+    lines = imported_rel.splitlines()
+    for line in lines:
+        if line.startswith("#") or line.startswith("x"):
+            continue
+        for i in range(len(line)):
+            if line[i].isdigit():
+                numbers = numbers + line[i]
+            if line[i] == "o":
+                if numbers == "":
+                    arr[row].append(1)
+                else:
+                    arr[row].extend(1 for _ in range(int(numbers)))
+                    numbers = ""
+            if line[i] == "b":
+                if numbers == "":
+                    arr[row].append(0)
+                else:
+                    arr[row].extend(0 for _ in range(int(numbers)))
+                    numbers = ""
+            if line[i] == "$":
+                row += 1
+                arr.append([])
+            if line[i] == "!":
+                return arr
+
 parser = argparse.ArgumentParser()
-parser.add_argument("-I", "--importBoard", type = argparse.FileType('r'), default = "./boards/soup.txt")
+parser.add_argument("-B", "--board", type = argparse.FileType('r'), default = "./boards/empty.rle")
 parser.add_argument("-W", "--width", type = int, default = 0)
 parser.add_argument("-H", "--height", type = int, default = 0)
 args = parser.parse_args()
 
-imported_board = args.importBoard.read()
-args.importBoard.close()
+imported_board = args.board.read()
+args.board.close()
 width = args.width
 height = args.height
 
-current_board = resize_board(ast.literal_eval(imported_board), width, height)
+current_board = resize_board(rel_to_arr(imported_board), width, height)
+print(current_board)
 
 while True:
     render_board(current_board)
