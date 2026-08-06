@@ -66,6 +66,8 @@ The main loop then repeatedly:
 
 If you want to use a custom `.rle` pattern, add it to the `boards/` folder and pass it via `-B`.
 
+Many `.rle` files are available for free online, including the LifeWiki collection of 5,200+ Game of Life patterns. Download a pattern from LifeWiki and use it directly with the `-B` flag.
+
 ## Conway's Game of Life rules
 
 Each cell has up to eight neighbors. The next state of a cell is determined by its current state and the number of alive neighbors:
