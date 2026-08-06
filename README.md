@@ -17,9 +17,10 @@ The program initializes a randomized board and continuously renders each generat
 ## Features
 
 - Terminal-based live simulation
-- Random initial board state
+- `.rle` board import support
+- Adjustable board size using CLI flags
 - Standard Conway Game of Life rules
-- Easy-to-read implementation with a minimal Python script
+- Minimal Python implementation with no external dependencies
 
 ## Requirements
 
@@ -28,29 +29,21 @@ The program initializes a randomized board and continuously renders each generat
 
 ## Usage
 
-From the project folder, run the script and provide a file containing a board (a Python literal list of lists of 0/1):
+Run the script with a board file and optional size flags:
 
 ```bash
-python app.py path/to/board_file.txt
+python app.py -B boards/pattern.rle -W 100 -H 50
 ```
 
-The program reads the file, parses the contents as a Python literal (using `ast.literal_eval`), and uses that as the initial board. The simulation renders each generation until interrupted.
+If no `-B` / `--board` flag is provided, the script defaults to `./boards/empty.rle`.
 
-### Example board file
+The script reads the selected `.rle` board file, converts the pattern into a 2D board array, and resizes the board to the requested width and height by padding with dead cells if needed.
 
-Save a file (for example `glider.txt`) containing a Python list of lists:
+### CLI options
 
-```text
-[[0, 1, 0],
- [0, 0, 1],
- [1, 1, 1]]
-```
-
-Run:
-
-```bash
-python app.py glider.txt
-```
+- `-B`, `--board`: path to an `.rle` board file (default: `./boards/empty.rle`)
+- `-W`, `--width`: desired board width (default: `0` — no extra width padding)
+- `-H`, `--height`: desired board height (default: `0` — no extra height padding)
 
 ## How it works
 
@@ -60,14 +53,18 @@ The implementation in `app.py` includes the following functions:
 - `random_board(width, height)`: returns a randomized grid containing dead (`0`) and alive (`1`) cells.
 - `render_board(board)`: prints the board to the terminal, using `#` for alive cells and a space for dead cells.
 - `compute_next_board(current_board)`: computes the next generation according to Conway's Game of Life rules.
+- `rel_to_arr(imported_rel)`: parses a Conway `.rle` pattern string into a 2D board array.
+- `resize_board(board, wanted_width, wanted_height)`: pads the board with dead cells to reach the requested width and height.
 
-On startup the script parses a board file (via `argparse` and `ast.literal_eval`) into `current_board`. The main loop then repeatedly:
+On startup the script parses CLI arguments, loads the chosen `.rle` board file, converts it into `current_board`, resizes it if needed, and then enters the simulation loop.
+
+The main loop then repeatedly:
 
 - renders `current_board` to the terminal
 - sleeps briefly (`time.sleep(0.05)`) to control frame rate
 - computes the next generation with `compute_next_board`
 
-If you prefer to start from a randomized board, you can create a file using Python that calls `random_board(...)` and writes the result to disk, then pass that file to the script.
+If you want to use a custom `.rle` pattern, add it to the `boards/` folder and pass it via `-B`.
 
 ## Conway's Game of Life rules
 
