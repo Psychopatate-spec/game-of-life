@@ -55,13 +55,34 @@ def compute_next_board(current_board):
                     next_board[row_index][col_index] = 1
     return next_board
 
-parser = argparse.ArgumentParser()
-parser.add_argument("board_file", type = argparse.FileType('r'))
-args = parser.parse_args()
-content = args.board_file.read()
-args.board_file.close()
+def resize_board(board, wanted_width, wanted_height):
+    wanted_board = board
+    board_height = len(board)
+    board_width = len(board[0])
+    if wanted_height > board_height:
+        height_offset = wanted_height - board_height
+        for i in range(height_offset):
+            wanted_board.append([0 for _ in range(board_width)])
+    if wanted_width > board_width:
+        width_offset = wanted_width - board_width
 
-current_board = ast.literal_eval(content)
+        for j in range(wanted_height):
+            for i in range(width_offset):
+                wanted_board[j].append(0)
+    return wanted_board
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-I", "--importBoard", type = argparse.FileType('r'), default = "./boards/soup.txt")
+parser.add_argument("-W", "--width", type = int, default = 0)
+parser.add_argument("-H", "--height", type = int, default = 0)
+args = parser.parse_args()
+
+imported_board = args.importBoard.read()
+args.importBoard.close()
+width = args.width
+height = args.height
+
+current_board = resize_board(ast.literal_eval(imported_board), width, height)
 
 while True:
     render_board(current_board)
