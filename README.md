@@ -37,7 +37,7 @@ python app.py -B boards/pattern.rle -W 100 -H 50
 
 If no `-B` / `--board` flag is provided, the script defaults to `./boards/empty.rle`.
 
-The script reads the selected `.rle` board file, converts the pattern into a 2D board array, and resizes the board to the requested width and height by padding with dead cells if needed.
+The script reads the selected `.rle` board file, converts the pattern into a 2D board array, -W and -H optionally add dead-cell padding to reach the requested dimensions.
 
 ### CLI options
 
@@ -53,7 +53,7 @@ The implementation in `app.py` includes the following functions:
 - `random_board(width, height)`: returns a randomized grid containing dead (`0`) and alive (`1`) cells.
 - `render_board(board)`: prints the board to the terminal, using `#` for alive cells and a space for dead cells.
 - `compute_next_board(current_board)`: computes the next generation according to Conway's Game of Life rules.
-- `rel_to_arr(imported_rel)`: parses a Conway `.rle` pattern string into a 2D board array.
+- `rle_to_arr(imported_rel)`: parses a Conway `.rle` pattern string into a 2D board array.
 - `resize_board(board, wanted_width, wanted_height)`: pads the board with dead cells to reach the requested width and height.
 
 On startup the script parses CLI arguments, loads the chosen `.rle` board file, converts it into `current_board`, resizes it if needed, and then enters the simulation loop.
@@ -66,9 +66,14 @@ The main loop then repeatedly:
 
 If you want to use a custom `.rle` pattern, add it to the `boards/` folder and pass it via `-B`.
 
-Many `.rle` files are available for free online, including the LifeWiki collection of 5,200+ Game of Life patterns. Download a pattern from LifeWiki and use it directly with the `-B` flag.
+Many `.rle` patterns are available online. The [LifeWiki pattern collection](https://conwaylife.com/wiki/Category:Patterns) contains thousands of Conway's Game of Life patterns.
 
+Download an `.rle` file and pass it to the program with:
+
+```bash
+python app.py -B path/to/pattern.rle
 ## Conway's Game of Life rules
+```
 
 Each cell has up to eight neighbors. The next state of a cell is determined by its current state and the number of alive neighbors:
 
@@ -76,6 +81,14 @@ Each cell has up to eight neighbors. The next state of a cell is determined by i
 - Alive cell with 2 or 3 neighbors: stays alive
 - Alive cell with more than 3 neighbors: dies (overpopulation)
 - Dead cell with exactly 3 neighbors: becomes alive (reproduction)
+
+## Example
+
+```text
+|          #             |
+|            #           |
+|          ###           |
+```
 
 ## Project structure
 
@@ -86,11 +99,13 @@ Each cell has up to eight neighbors. The next state of a cell is determined by i
 
 Potential enhancements for this project include:
 
-- configurable board size and speed via command-line arguments
-- support for loading predefined patterns
 - better terminal clearing and redraw handling
 - pause/resume controls
+- configurable simulation speed
 - support for toroidal (wraparound) board edges
+- support for additional Life rules
+- pattern browser / pattern selection from the CLI
+- improved RLE parsing
 
 ---
 
