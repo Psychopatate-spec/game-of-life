@@ -1,88 +1,94 @@
 # Game of Life
 
-A simple terminal implementation of Conway's Game of Life written in Python.
+A terminal-based Conway's Game of Life simulator written in Python.
 
-The program initializes a randomized board and continuously renders each generation in the terminal using `#` for alive cells and spaces for dead cells.
+This project loads a pattern from an `.rle` file, renders it in the terminal, and evolves it according to Conway's rules frame by frame.
 
 ## Table of Contents
 
 - [Features](#features)
 - [Requirements](#requirements)
 - [Usage](#usage)
+- [CLI options](#cli-options)
 - [How it works](#how-it-works)
 - [Conway's Game of Life rules](#conways-game-of-life-rules)
+- [Example](#example)
 - [Project structure](#project-structure)
 - [Future improvements](#future-improvements)
 
 ## Features
 
-- Terminal-based live simulation
-- `.rle` board import support
-- Adjustable board size using CLI flags
-- Standard Conway Game of Life rules
-- Minimal Python implementation with no external dependencies
+- Loads Game of Life patterns from `.rle` files
+- Renders the board in the terminal using `#` for live cells and spaces for dead cells
+- Supports custom width and height with `-W` and `-H`
+- Works with public pattern collections such as LifeWiki
+- No external dependencies required
 
 ## Requirements
 
 - Python 3.x
-- No external dependencies
 
 ## Usage
 
-Run the script with a board file and optional size flags:
+Run the script from the project folder:
 
 ```bash
 python app.py -B boards/pattern.rle -W 100 -H 50
 ```
 
-If no `-B` / `--board` flag is provided, the script defaults to `./boards/empty.rle`.
+You can also use the default empty pattern:
 
-The script reads the selected `.rle` board file, converts the pattern into a 2D board array, -W and -H optionally add dead-cell padding to reach the requested dimensions.
+```bash
+python app.py
+```
 
-### CLI options
+The script reads the `.rle` file, converts it into a 2D board, optionally pads it to the requested size, and displays the evolving board in the terminal.
 
-- `-B`, `--board`: path to an `.rle` board file (default: `./boards/empty.rle`)
-- `-W`, `--width`: desired board width (default: `0` — no extra width padding)
-- `-H`, `--height`: desired board height (default: `0` — no extra height padding)
+## CLI options
+
+- `-B`, `--board`: path to the `.rle` pattern file. Default: `./empty.rle`
+- `-W`, `--width`: desired board width. Default: `0`
+- `-H`, `--height`: desired board height. Default: `0`
+
+Example with a public LifeWiki pattern:
+
+```bash
+python app.py -B /path/to/pattern.rle -W 120 -H 60
+```
+
+You can download free `.rle` patterns from the [LifeWiki pattern collection](https://conwaylife.com/wiki/Category:Patterns). LifeWiki contains 5,200+ Game of Life patterns that work well with this project.
 
 ## How it works
 
 The implementation in `app.py` includes the following functions:
 
-- `empty_board(width, height)`: returns a grid of dead cells (`0`) with the requested dimensions.
-- `random_board(width, height)`: returns a randomized grid containing dead (`0`) and alive (`1`) cells.
-- `render_board(board)`: prints the board to the terminal, using `#` for alive cells and a space for dead cells.
-- `compute_next_board(current_board)`: computes the next generation according to Conway's Game of Life rules.
-- `rle_to_arr(imported_rel)`: parses a Conway `.rle` pattern string into a 2D board array.
-- `resize_board(board, wanted_width, wanted_height)`: pads the board with dead cells to reach the requested width and height.
+- `empty_board(width, height)`: creates a rectangular board full of dead cells (`0`)
+- `random_board(width, height)`: creates a random board of `0` and `1` values
+- `render_board(board)`: prints the board to the terminal
+- `compute_next_board(current_board)`: applies Conway's Game of Life rules to compute the next generation
+- `resize_board(board, wanted_width, wanted_height)`: pads or resizes the board with dead cells if needed
+- `rle_to_arr(imported_rle)`: parses an `.rle` pattern into a 2D list of rows and columns
 
-On startup the script parses CLI arguments, loads the chosen `.rle` board file, converts it into `current_board`, resizes it if needed, and then enters the simulation loop.
+The main loop does this repeatedly:
 
-The main loop then repeatedly:
+1. load the pattern from the `.rle` file
+2. resize it if width or height are specified
+3. render the current board
+4. wait briefly with `time.sleep(0.05)`
+5. compute the next board with `compute_next_board`
 
-- renders `current_board` to the terminal
-- sleeps briefly (`time.sleep(0.05)`) to control frame rate
-- computes the next generation with `compute_next_board`
-
-If you want to use a custom `.rle` pattern, add it to the `boards/` folder and pass it via `-B`.
-
-Many `.rle` patterns are available online. The [LifeWiki pattern collection](https://conwaylife.com/wiki/Category:Patterns) contains thousands of Conway's Game of Life patterns.
-
-Download an `.rle` file and pass it to the program with:
-
-```bash
-python app.py -B path/to/pattern.rle
 ## Conway's Game of Life rules
-```
 
-Each cell has up to eight neighbors. The next state of a cell is determined by its current state and the number of alive neighbors:
+Each cell has up to 8 neighbors. The next state of a cell depends on the number of living neighbors:
 
-- Alive cell with fewer than 2 neighbors: dies (underpopulation)
-- Alive cell with 2 or 3 neighbors: stays alive
-- Alive cell with more than 3 neighbors: dies (overpopulation)
-- Dead cell with exactly 3 neighbors: becomes alive (reproduction)
+- A live cell with fewer than 2 neighbors dies from underpopulation
+- A live cell with 2 or 3 neighbors stays alive
+- A live cell with more than 3 neighbors dies from overpopulation
+- A dead cell with exactly 3 neighbors becomes alive
 
 ## Example
+
+This is a common pattern called a glider:
 
 ```text
 |          #             |
@@ -90,23 +96,25 @@ Each cell has up to eight neighbors. The next state of a cell is determined by i
 |          ###           |
 ```
 
+It moves across the board over time as the simulation advances.
+
 ## Project structure
 
-- `app.py` — main simulation script and core logic
+- `app.py` — main simulation logic and CLI parser
+- `empty.rle` — default empty board pattern
 - `README.md` — project documentation
 
 ## Future improvements
 
-Potential enhancements for this project include:
+Possible enhancements include:
 
-- better terminal clearing and redraw handling
+- better terminal clearing and redraw behavior
 - pause/resume controls
 - configurable simulation speed
-- support for toroidal (wraparound) board edges
-- support for additional Life rules
-- pattern browser / pattern selection from the CLI
-- improved RLE parsing
+- support for toroidal wraparound edges
+- more robust RLE parsing for advanced pattern files
+- a pattern browser from the command line
 
 ---
 
-Built as a small Python terminal project for Conway's Game of Life.
+Built as a small Python terminal project inspired by Conway's Game of Life.
