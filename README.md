@@ -98,6 +98,17 @@ This is a common pattern called a glider:
 
 It moves across the board over time as the simulation advances.
 
+## Preview showcase
+
+```html
+<video controls muted playsinline width="100%">
+  <source src="preview.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+```
+
+This short preview shows the terminal simulation in action with a live Game of Life pattern evolving over time.
+
 ## Project structure
 
 - `app.py` — main simulation logic and CLI parser
