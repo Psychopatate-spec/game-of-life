@@ -16,6 +16,12 @@ This project loads a pattern from an `.rle` file, renders it in the terminal, an
 - [Project structure](#project-structure)
 - [Future improvements](#future-improvements)
 
+## Preview showcase
+
+[assets_preview.webm](https://github.com/user-attachments/assets/4f13b951-21f0-4edf-b6af-7afcc6e0cdbb)
+
+This short preview shows the terminal simulation in action with a live Game of Life pattern evolving over time.
+
 ## Features
 
 - Loads Game of Life patterns from `.rle` files
@@ -97,12 +103,6 @@ This is a common pattern called a glider:
 ```
 
 It moves across the board over time as the simulation advances.
-
-## Preview showcase
-
-![Game of Life preview](./assets/preview.webm)
-
-This short preview shows the terminal simulation in action with a live Game of Life pattern evolving over time.
 
 ## Project structure
 
