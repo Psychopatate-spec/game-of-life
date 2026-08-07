@@ -100,12 +100,7 @@ It moves across the board over time as the simulation advances.
 
 ## Preview showcase
 
-```html
-<video controls muted playsinline width="100%">
-  <source src="assets/preview.mp4" type="video/mp4" />
-  Your browser does not support the video tag.
-</video>
-```
+![Game of Life preview](assets/preview.gif)
 
 This short preview shows the terminal simulation in action with a live Game of Life pattern evolving over time.
 
