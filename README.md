@@ -102,7 +102,7 @@ It moves across the board over time as the simulation advances.
 
 ```html
 <video controls muted playsinline width="100%">
-  <source src="preview.mp4" type="video/mp4" />
+  <source src="assets/preview.mp4" type="video/mp4" />
   Your browser does not support the video tag.
 </video>
 ```
