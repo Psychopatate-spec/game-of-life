@@ -56,7 +56,7 @@ Example with a public LifeWiki pattern:
 python app.py -B /path/to/pattern.rle -W 120 -H 60
 ```
 
-You can download free `.rle` patterns from the [LifeWiki pattern collection](https://conwaylife.com/wiki/Category:Patterns). LifeWiki contains 5,200+ Game of Life patterns that work well with this project.
+You can download free `.rle` patterns from the [LifeWiki pattern collection](https://conwaylife.com/wiki/Category:Patterns). LifeWiki hosts a large collection of Game of Life patterns.
 
 ## How it works
 
@@ -66,7 +66,7 @@ The implementation in `app.py` includes the following functions:
 - `random_board(width, height)`: creates a random board of `0` and `1` values
 - `render_board(board)`: prints the board to the terminal
 - `compute_next_board(current_board)`: applies Conway's Game of Life rules to compute the next generation
-- `resize_board(board, wanted_width, wanted_height)`: pads or resizes the board with dead cells if needed
+- `resize_board(board, wanted_width, wanted_height)`: pads the board with dead cells when the requested dimensions are larger than the pattern.
 - `rle_to_arr(imported_rle)`: parses an `.rle` pattern into a 2D list of rows and columns
 
 The main loop does this repeatedly:
