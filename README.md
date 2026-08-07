@@ -76,13 +76,11 @@ The implementation in `app.py` includes the following functions:
 - `resize_board(board, wanted_width, wanted_height)`: pads the board with dead cells when the requested dimensions are larger than the pattern.
 - `rle_to_arr(imported_rle)`: parses an `.rle` pattern into a 2D list of rows and columns
 
-The main loop does this repeatedly:
+The program first loads and parses the selected `.rle` pattern, optionally resizes it, and then repeatedly:
 
-1. load the pattern from the `.rle` file
-2. resize it if width or height are specified
-3. render the current board
-4. wait briefly with `time.sleep(0.05)`
-5. compute the next board with `compute_next_board`
+1. render the current board
+2. wait briefly with `time.sleep(0.05)`
+3. compute the next generation with `compute_next_board`
 
 ## Conway's Game of Life rules
 
