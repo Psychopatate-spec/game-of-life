@@ -100,7 +100,7 @@ It moves across the board over time as the simulation advances.
 
 ## Preview showcase
 
-![Game of Life preview](assets/preview.gif)
+![Game of Life preview](assets/preview.mp4)
 
 This short preview shows the terminal simulation in action with a live Game of Life pattern evolving over time.
 
