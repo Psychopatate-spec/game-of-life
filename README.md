@@ -6,6 +6,7 @@ This project loads a pattern from an `.rle` file, renders it in the terminal, an
 
 ## Table of Contents
 
+- [Preview showcase](#preview-showcase)
 - [Features](#features)
 - [Requirements](#requirements)
 - [Usage](#usage)
