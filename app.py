@@ -1,7 +1,17 @@
 import random
 import argparse
 import time
-import ast
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-B", "--board", type = argparse.FileType('r'), default = "./empty.rle")
+parser.add_argument("-W", "--width", type = int, default = 0)
+parser.add_argument("-H", "--height", type = int, default = 0)
+args = parser.parse_args()
+
+imported_board = args.board.read()
+args.board.close()
+width = args.width
+height = args.height
 
 def empty_board(width, height):
     board = [[0 for _ in range(width)] for _ in range(height)]
@@ -71,48 +81,70 @@ def resize_board(board, wanted_width, wanted_height):
                 wanted_board[j].append(0)
     return wanted_board
 
-def rel_to_arr(imported_rel):
+def rle_to_arr(imported_rle):
     arr = [[]]
     row = 0
     numbers = ""
-    lines = imported_rel.splitlines()
+    x = ""
+    y = ""
+    lines = imported_rle.splitlines()
     for line in lines:
-        if line.startswith("#") or line.startswith("x"):
+        if line.startswith("x"):
+            for i in range(len(line)):
+                if line[i] == "x":
+                    x = ""
+                    i += 1
+                    while i < len(line) and not line[i].isdigit():
+                        i += 1
+                    while i < len(line) and line[i].isdigit():
+                        x += line[i]
+                        i += 1
+                if line[i] == "y":
+                    y = ""
+                    i += 1
+                    while i < len(line) and not line[i].isdigit():
+                        i += 1
+                    while i < len(line) and line[i].isdigit():
+                        y += line[i]
+                        i += 1
+            x = int(x)
+            y = int(y)
+            break
+    rle_data = ""
+    for line in lines:
+        if line.startswith("#"):
             continue
-        for i in range(len(line)):
-            if line[i].isdigit():
-                numbers = numbers + line[i]
-            if line[i] == "o":
-                if numbers == "":
-                    arr[row].append(1)
-                else:
-                    arr[row].extend(1 for _ in range(int(numbers)))
-                    numbers = ""
-            if line[i] == "b":
-                if numbers == "":
-                    arr[row].append(0)
-                else:
-                    arr[row].extend(0 for _ in range(int(numbers)))
-                    numbers = ""
-            if line[i] == "$":
-                row += 1
-                arr.append([])
-            if line[i] == "!":
-                return arr
+        if line.startswith("x"):
+            continue
+        rle_data += line
+    for i in range(len(rle_data)):
+        if rle_data[i].isdigit():
+            numbers += rle_data[i]
+        if rle_data[i] == "o":
+            if numbers == "":
+                arr[row].append(1)
+            else:
+                arr[row].extend(1 for _ in range(int(numbers)))
+                numbers = ""
+        if rle_data[i] == "b":
+            if numbers == "":
+                arr[row].append(0)
+            else:
+                arr[row].extend(0 for _ in range(int(numbers)))
+                numbers = ""
+        if rle_data[i] == "$":
+            row += 1
+            arr.append([])
+        if rle_data[i] == "!":
+            break
+    for row in arr:
+        while len(row) < x:
+            row.append(0)
+    while len(arr) < y:
+        arr.append([0 for _ in range(x)])
+    return arr
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-B", "--board", type = argparse.FileType('r'), default = "./empty.rle")
-parser.add_argument("-W", "--width", type = int, default = 0)
-parser.add_argument("-H", "--height", type = int, default = 0)
-args = parser.parse_args()
-
-imported_board = args.board.read()
-args.board.close()
-width = args.width
-height = args.height
-
-current_board = resize_board(rel_to_arr(imported_board), width, height)
-print(current_board)
+current_board = resize_board(rle_to_arr(imported_board), width, height)
 
 while True:
     render_board(current_board)
