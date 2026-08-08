@@ -66,20 +66,24 @@ def compute_next_board(current_board):
     return next_board
 
 def resize_board(board, wanted_width, wanted_height):
-    wanted_board = board
+    if not board:
+        return [[0 for _ in range(wanted_width)] for _ in range(wanted_height)]
     board_height = len(board)
     board_width = len(board[0])
-    if wanted_height > board_height:
-        height_offset = wanted_height - board_height
-        for i in range(height_offset):
-            wanted_board.append([0 for _ in range(board_width)])
-    if wanted_width > board_width:
-        width_offset = wanted_width - board_width
-
-        for j in range(wanted_height):
-            for i in range(width_offset):
-                wanted_board[j].append(0)
-    return wanted_board
+    if wanted_width <= 0:
+        wanted_width = board_width
+    if wanted_height <= 0:
+        wanted_height = board_height
+    resized_board = [[0 for _ in range(wanted_width)] for _ in range(wanted_height)]
+    top_offset = max(0, (wanted_height - board_height) // 2)
+    left_offset = max(0, (wanted_width - board_width) // 2)
+    for row_index in range(board_height):
+        for col_index in range(board_width):
+            target_row = top_offset + row_index
+            target_col = left_offset + col_index
+            if 0 <= target_row < wanted_height and 0 <= target_col < wanted_width:
+                resized_board[target_row][target_col] = board[row_index][col_index]
+    return resized_board
 
 def rle_to_arr(imported_rle):
     arr = [[]]
@@ -133,8 +137,14 @@ def rle_to_arr(imported_rle):
                 arr[row].extend(0 for _ in range(int(numbers)))
                 numbers = ""
         if rle_data[i] == "$":
-            row += 1
-            arr.append([])
+            if numbers == "":
+                row_count = 1
+            else:
+                row_count = int(numbers)
+            for _ in range(row_count):
+                row += 1
+                arr.append([])
+            numbers = ""
         if rle_data[i] == "!":
             break
     for row in arr:
